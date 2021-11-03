@@ -1,0 +1,22 @@
+{
+  "name": "npm-class",
+  "version": "0.1.0",
+  "description": "Paquete ejemplo de proyecto node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ejemplo",
+    "ejercicio",
+    "node",
+    "npm",
+    "mi-primer-proyuect"
+  ],
+  "author": "@McLorian13",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^5.1.3",
+    "dotenv": "^10.0.0"
+  }
+}
