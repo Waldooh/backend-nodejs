@@ -1,7 +1,7 @@
 const Product = require("../../models/products").model;
 
-const get = async () => {
-    const allProducts = await Product.find({}).exec();
+const get = async (limit) => {
+    const allProducts = await Product.find({}, null, { limit: limit }).exec();
     return allProducts;
 };
 
@@ -12,7 +12,7 @@ const getById = async (productId) => {
 
 const create = async (productData) => {
     const { name, price } = productData
-    const product = new Product({name, price});
+    const product = new Product({ name, price });
     const savedProduct = await product.save();
 
     return savedProduct;

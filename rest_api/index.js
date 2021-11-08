@@ -12,6 +12,8 @@ app.get("/", (request, response) => {
     response.send("<h1>Hello Koders!</h1>");
 });
 
+app.use(authHandler);
+
 apiRouter(app);
 
 app.use(logErrors);

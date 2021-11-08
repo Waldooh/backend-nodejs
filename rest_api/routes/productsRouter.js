@@ -12,7 +12,7 @@ router.get("/", async (request, response, next) => {
     const { limit } = request.query;
 
     try {
-        const products = await product.get();
+        const products = await product.get(limit);
         response.json({
             ok: true,
             message: "Done!",
@@ -24,9 +24,10 @@ router.get("/", async (request, response, next) => {
 });
 
 router.get("/:id", async (request, response, next) => {
-    try {
-        const { id } = request.params;
-        
+    const { id } = request.params;
+    
+    try {    
+        const product = await product.getById(id);
         response.json({
             ok: true,
             message: "Done!",
@@ -37,20 +38,20 @@ router.get("/:id", async (request, response, next) => {
     }
 });
 
-router.use(authHandler);
+// router.use(authHandler);
 
 router.post("/", async (request, response, next) => {
 
     try {
-        const productData = request.body
-        const productCreated = await product.create(productData)
+        const productData = request.body;
+        const productCreated = await product.create(productData);
 
         response.status(201).json({
             ok: true,
             message: "New product created",
             payload: {
                 product: productCreated,
-            }
+            },
         });
     } catch (error) {
         next(error);
@@ -59,44 +60,38 @@ router.post("/", async (request, response, next) => {
 });
 
 
-router.patch("/:id", (request, response) => {
+router.patch("/:id", async (request, response, next) => {
     const { id } = request.params;
     const { name, price } = request.body;
 
-    if(id === "99") {
-        response.status(404).json({
-            ok: false,
-            message: "Product not found",
-        });
-    } else {
-        response.status(201).json({
+    try {
+        const productResponse = await product.update(id, {name, price});
+        response.json({
             ok: true,
-            message: `Product ${id} updated successfully`,
-            payload: {
-                name,
-                price,
-            },
+            message: "Product updated successfully",
+            payload: { productResponse },
         });
+    } catch (error) {
+        next(error)
     }
-
-    response.json({
-        ok: true,
-        message: `Product ${id} updated successfully`,
-        payload: {
-            name,
-            price,
-        },
-    });
 });
 
 
-router.delete("/:id", (request, response) => {
+router.delete("/:id", async (request, response, next) => {
     const { id } = request.params;
-    // Logica para eliminar
-    response.status(202).jason({
-        ok: true,
-        message: `Product ${id} deleted successfully`
-    });
+
+    try {
+        const deletedProduct = await product.del(id);
+        response.json({
+            ok: true,
+            message: "Product deleted successfully",
+            payload: { 
+                product: deletedProduct 
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
 });
 
 module.exports = router;
